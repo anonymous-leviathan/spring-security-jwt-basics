@@ -1,6 +1,7 @@
 package com.mgunawardhana.microservices.spring.auth;
 
 import com.mgunawardhana.microservices.spring.domain.AuthenticationResponse;
+import com.mgunawardhana.microservices.spring.domain.RegistrationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
