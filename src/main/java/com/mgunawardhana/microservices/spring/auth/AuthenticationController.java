@@ -1,5 +1,6 @@
 package com.mgunawardhana.microservices.spring.auth;
 
+import com.mgunawardhana.microservices.spring.domain.AuthenticationRequest;
 import com.mgunawardhana.microservices.spring.domain.AuthenticationResponse;
 import com.mgunawardhana.microservices.spring.domain.RegistrationRequest;
 import lombok.RequiredArgsConstructor;
