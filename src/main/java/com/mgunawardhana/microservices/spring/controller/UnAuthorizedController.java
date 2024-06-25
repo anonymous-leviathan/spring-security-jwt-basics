@@ -1,8 +1,8 @@
-package com.mgunawardhana.microservices.spring.auth;
+package com.mgunawardhana.microservices.spring.controller;
 
-import com.mgunawardhana.microservices.spring.domain.AuthenticationRequest;
-import com.mgunawardhana.microservices.spring.domain.AuthenticationResponse;
-import com.mgunawardhana.microservices.spring.domain.RegistrationRequest;
+import com.mgunawardhana.microservices.spring.domain.request.AuthenticationRequest;
+import com.mgunawardhana.microservices.spring.domain.response.AuthenticationResponse;
+import com.mgunawardhana.microservices.spring.domain.request.RegistrationRequest;
 import com.mgunawardhana.microservices.spring.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,20 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class UnAuthorizedController {
 
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegistrationRequest registrationRequest){
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegistrationRequest registrationRequest) {
         log.info("RegistrationRequest: {}", registrationRequest.toString());
         return ResponseEntity.ok(authenticationService.register(registrationRequest));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request){
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
         log.info("AuthenticationRequest: {}", request.toString());
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
-
 }
