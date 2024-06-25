@@ -7,15 +7,16 @@ import com.mgunawardhana.microservices.spring.repository.UserRepository;
 import com.mgunawardhana.microservices.spring.user.Role;
 import com.mgunawardhana.microservices.spring.user.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -31,11 +32,15 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(registrationRequest.getPassword()))
                 .role(Role.USER)
                 .build();
+
+        log.info("AuthenticationResponse From Register: {}", user.toString());
+
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+
+        log.info("Generated Token from Register Function: {}", jwtToken);
+
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -43,7 +48,13 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+
+        log.info("AuthenticationResponse From Authenticate Function: {}", user);
+
         var jwtToken = jwtService.generateToken(user);
+
+        log.info("Generated Token from Authenticate Function: {}", jwtToken);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();

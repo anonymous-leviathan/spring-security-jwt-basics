@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url:
-    username:
-    password:
-      driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/springSecurity
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: create-drop
