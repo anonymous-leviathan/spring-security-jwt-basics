@@ -22,7 +22,7 @@ curl --location 'http://localhost:8080/api/v1/auth/authenticate' \
 }'
 ```
 
-## auth curl please genrate before token to get token
+## auth curl please genrate token before access this application
 
 ```
 curl --location 'http://localhost:8080/api/v1/authorized' \
