@@ -1,4 +1,4 @@
-package com.mgunawardhana.microservices.spring.domain;
+package com.mgunawardhana.microservices.spring.domain.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

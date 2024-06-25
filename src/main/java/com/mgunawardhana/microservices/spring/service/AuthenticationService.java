@@ -1,11 +1,11 @@
 package com.mgunawardhana.microservices.spring.service;
 
-import com.mgunawardhana.microservices.spring.domain.AuthenticationRequest;
-import com.mgunawardhana.microservices.spring.domain.AuthenticationResponse;
-import com.mgunawardhana.microservices.spring.domain.RegistrationRequest;
+import com.mgunawardhana.microservices.spring.domain.request.AuthenticationRequest;
+import com.mgunawardhana.microservices.spring.domain.response.AuthenticationResponse;
+import com.mgunawardhana.microservices.spring.domain.request.RegistrationRequest;
 import com.mgunawardhana.microservices.spring.repository.UserRepository;
-import com.mgunawardhana.microservices.spring.user.Role;
-import com.mgunawardhana.microservices.spring.user.User;
+import com.mgunawardhana.microservices.spring.domain.Role;
+import com.mgunawardhana.microservices.spring.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;

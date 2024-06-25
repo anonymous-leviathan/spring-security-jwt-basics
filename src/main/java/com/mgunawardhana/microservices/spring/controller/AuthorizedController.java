@@ -1,4 +1,4 @@
-package com.mgunawardhana.microservices.spring.authorized;
+package com.mgunawardhana.microservices.spring.controller;
 
 
 import lombok.extern.slf4j.Slf4j;

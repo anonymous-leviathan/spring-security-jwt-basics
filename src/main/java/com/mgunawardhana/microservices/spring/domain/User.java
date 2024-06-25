@@ -1,4 +1,4 @@
-package com.mgunawardhana.microservices.spring.user;
+package com.mgunawardhana.microservices.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
