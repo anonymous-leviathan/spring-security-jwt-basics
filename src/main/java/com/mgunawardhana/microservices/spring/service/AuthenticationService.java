@@ -66,6 +66,7 @@ public class AuthenticationService {
         final String userEmail;
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            log.error("Authorization Header is Null or Not Started with Bearer");
             return;
         }
 
@@ -74,12 +75,15 @@ public class AuthenticationService {
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userDetails = this.userRepository.findByEmail(userEmail).orElseThrow();
-            if (jwtService.isTokenValidated(refreshToken, userDetails)) {
-                var accessToken = jwtService.generateToken(userDetails);
+            log.info("User Details from Refresh Token: {}", userDetails);
 
-//                revokeAllUserToken(user);
-//                saveUserToken(userDetails, accessToken);
+            if (jwtService.isTokenValidated(refreshToken, userDetails)) {
+
+                var accessToken = jwtService.generateToken(userDetails);
+                log.info("Generated Token from Refresh Token Function: {}", accessToken);
+
                 var authResponse = AuthenticationResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+                log.info("Authentication Response from Refresh Token Function: {}", authResponse);
 
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }

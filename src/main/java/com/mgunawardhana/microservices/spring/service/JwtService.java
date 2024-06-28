@@ -1,12 +1,10 @@
 package com.mgunawardhana.microservices.spring.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,6 +13,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 @Slf4j
@@ -58,11 +57,17 @@ public class JwtService {
     }
 
     private String buildToken(Map<String, Object> extractClaims, UserDetails userDetails, long expiration) {
-        return Jwts.builder().setClaims(extractClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
+        String buildToken = null;
+        try{
+            buildToken = Jwts.builder().setClaims(extractClaims)
+                    .setSubject(userDetails.getUsername())
+                    .setIssuedAt(new Date(System.currentTimeMillis()))
+                    .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                    .signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
+        }catch(JwtException e){
+            log.error("Error Occurred While Building Token");
+        }
+        return Objects.requireNonNull(buildToken,"This Token is Null!");
     }
 
     public boolean isTokenValidated(String token, UserDetails userDetails) {

@@ -38,6 +38,7 @@ public class UnAuthorizedController {
 
     @PostMapping("/refresh")
     public void refresh(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        log.info("Refresh Request: {} Response: {}", request.toString(), response.toString());
         authenticationService.refreshToken(request, response);
     }
 }
