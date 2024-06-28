@@ -1,10 +1,12 @@
 package com.mgunawardhana.microservices.spring.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Slf4j
 @Service
 public class JwtService {
 
@@ -32,8 +35,14 @@ public class JwtService {
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        T claimResolverValue = null;
+        try {
+            final Claims claims = extractAllClaims(token);
+            claimResolverValue =claimsResolver.apply(claims);
+        }catch (ExpiredJwtException e) {
+            log.error("Access Token Expired Exception: {}", e.getMessage().toUpperCase());
+        }
+        return claimResolverValue;
     }
 
     public String generateToken(UserDetails userDetails) {
