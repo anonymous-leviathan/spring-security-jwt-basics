@@ -7,6 +7,7 @@ import com.mgunawardhana.microservices.spring.domain.request.AuthenticationReque
 import com.mgunawardhana.microservices.spring.domain.request.RegistrationRequest;
 import com.mgunawardhana.microservices.spring.domain.response.AuthenticationResponse;
 import com.mgunawardhana.microservices.spring.repository.UserRepository;
+import com.mgunawardhana.microservices.spring.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ import java.io.IOException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl {
+public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -32,6 +33,7 @@ public class AuthenticationServiceImpl {
 
     private final AuthenticationManager authenticationManager;
 
+    @Override
     public AuthenticationResponse register(RegistrationRequest registrationRequest) {
         var user = User.builder().firstName(registrationRequest.getFirstName()).lastName(registrationRequest.getLastName()).email(registrationRequest.getEmail()).password(passwordEncoder.encode(registrationRequest.getPassword())).role(Role.USER).build();
 
@@ -46,6 +48,7 @@ public class AuthenticationServiceImpl {
         return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).build();
     }
 
+    @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
@@ -60,6 +63,7 @@ public class AuthenticationServiceImpl {
         return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).build();
     }
 
+    @Override
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
