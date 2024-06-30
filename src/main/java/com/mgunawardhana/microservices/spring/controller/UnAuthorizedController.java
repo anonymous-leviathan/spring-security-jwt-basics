@@ -3,7 +3,7 @@ package com.mgunawardhana.microservices.spring.controller;
 import com.mgunawardhana.microservices.spring.domain.request.AuthenticationRequest;
 import com.mgunawardhana.microservices.spring.domain.request.RegistrationRequest;
 import com.mgunawardhana.microservices.spring.domain.response.AuthenticationResponse;
-import com.mgunawardhana.microservices.spring.service.AuthenticationService;
+import com.mgunawardhana.microservices.spring.service.impl.AuthenticationServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,23 +22,23 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UnAuthorizedController {
 
-    private final AuthenticationService authenticationService;
+    private final AuthenticationServiceImpl authenticationServiceImpl;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegistrationRequest registrationRequest) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegistrationRequest registrationRequest){
         log.info("RegistrationRequest: {}", registrationRequest.toString());
-        return ResponseEntity.ok(authenticationService.register(registrationRequest));
+        return ResponseEntity.ok(authenticationServiceImpl.register(registrationRequest));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
         log.info("AuthenticationRequest: {}", request.toString());
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        return ResponseEntity.ok(authenticationServiceImpl.authenticate(request));
     }
 
     @PostMapping("/refresh")
     public void refresh(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.info("Refresh Request: {} Response: {}", request.toString(), response.toString());
-        authenticationService.refreshToken(request, response);
+        authenticationServiceImpl.refreshToken(request, response);
     }
 }

@@ -1,6 +1,6 @@
 package com.mgunawardhana.microservices.spring.config;
 
-import com.mgunawardhana.microservices.spring.service.JwtService;
+import com.mgunawardhana.microservices.spring.service.impl.JwtServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtServiceImpl;
 
     private final UserDetailsService userDetailsService;
 
@@ -42,11 +42,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final String jwt = authorizationHeader.substring(7);
-        final String userEmail = jwtService.extractUserName(jwt);
+        final String userEmail = jwtServiceImpl.extractUserName(jwt);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValidated(jwt, userDetails)) {
+            if (jwtServiceImpl.isTokenValidated(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
