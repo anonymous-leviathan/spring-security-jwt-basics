@@ -4,6 +4,7 @@ import com.mgunawardhana.microservices.spring.service.JwtService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,12 +21,15 @@ import java.util.function.Function;
 @Service
 public class JwtServiceImpl implements JwtService {
 
+    @NotNull
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
 
+    @NotNull
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
 
+    @NotNull
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
@@ -94,7 +98,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Key getSignInKey() {
-        byte[] secretBytes = Decoders.BASE64.decode(secretKey);
+        byte[] secretBytes = Decoders.BASE64.decode(Objects.requireNonNull(secretKey));
         return Keys.hmacShaKeyFor(secretBytes);
     }
 }

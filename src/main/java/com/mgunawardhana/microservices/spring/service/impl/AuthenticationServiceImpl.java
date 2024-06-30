@@ -11,6 +11,7 @@ import com.mgunawardhana.microservices.spring.service.AuthenticationService;
 import com.mgunawardhana.microservices.spring.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,12 +27,17 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
+
+    @NotNull
     private final UserRepository userRepository;
 
+    @NotNull
     private final PasswordEncoder passwordEncoder;
 
+    @NotNull
     private final JwtService jwtService;
 
+    @NotNull
     private final AuthenticationManager authenticationManager;
 
     @Override

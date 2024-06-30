@@ -1,6 +1,7 @@
 package com.mgunawardhana.microservices.spring.config;
 
 import jakarta.servlet.Filter;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    @NotNull
     private final JwtAuthenticationFilter jwtAuthFilter;
+
+    @NotNull
     private final AuthenticationProvider authenticationProvider;
 
     @SneakyThrows

@@ -1,10 +1,12 @@
 package com.mgunawardhana.microservices.spring.config;
 
+import com.mgunawardhana.microservices.spring.service.JwtService;
 import com.mgunawardhana.microservices.spring.service.impl.JwtServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -22,9 +24,11 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    @NotNull
     @Autowired
-    private final JwtServiceImpl jwtServiceImpl;
+    private final JwtService jwtService;
 
+    @NotNull
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -42,11 +46,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final String jwt = authorizationHeader.substring(7);
-        final String userEmail = jwtServiceImpl.extractUserName(jwt);
+        final String userEmail = jwtService.extractUserName(jwt);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtServiceImpl.isTokenValidated(jwt, userDetails)) {
+            if (jwtService.isTokenValidated(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

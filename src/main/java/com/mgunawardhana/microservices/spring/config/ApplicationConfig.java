@@ -1,6 +1,7 @@
 package com.mgunawardhana.microservices.spring.config;
 
 import com.mgunawardhana.microservices.spring.repository.UserRepository;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
+    @NotNull
     private final UserRepository userRepository;
 
     @Bean

@@ -7,8 +7,11 @@ import com.mgunawardhana.microservices.spring.service.AuthenticationService;
 import com.mgunawardhana.microservices.spring.service.impl.AuthenticationServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,16 +26,17 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UnAuthorizedController {
 
+    @NotNull
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegistrationRequest registrationRequest){
+    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegistrationRequest registrationRequest){
         log.info("RegistrationRequest: {}", registrationRequest.toString());
         return ResponseEntity.ok(authenticationService.register(registrationRequest));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest request) {
         log.info("AuthenticationRequest: {}", request.toString());
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
