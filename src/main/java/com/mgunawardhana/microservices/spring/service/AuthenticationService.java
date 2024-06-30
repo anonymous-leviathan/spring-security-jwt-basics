@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface AuthenticationService {
+
     AuthenticationResponse register(RegistrationRequest registrationRequest);
 
     AuthenticationResponse authenticate(AuthenticationRequest request);

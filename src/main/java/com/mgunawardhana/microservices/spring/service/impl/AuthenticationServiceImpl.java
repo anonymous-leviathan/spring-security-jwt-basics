@@ -8,6 +8,7 @@ import com.mgunawardhana.microservices.spring.domain.request.RegistrationRequest
 import com.mgunawardhana.microservices.spring.domain.response.AuthenticationResponse;
 import com.mgunawardhana.microservices.spring.repository.UserRepository;
 import com.mgunawardhana.microservices.spring.service.AuthenticationService;
+import com.mgunawardhana.microservices.spring.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final JwtServiceImpl jwtServiceImpl;
+    private final JwtService jwtService;
 
     private final AuthenticationManager authenticationManager;
 
@@ -40,8 +41,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         log.info("AuthenticationResponse From Register: {}", user.toString());
 
         userRepository.save(user);
-        var jwtToken = jwtServiceImpl.generateToken(user);
-        var refreshToken = jwtServiceImpl.generateRefreshToken(user);
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
 
         log.info("Generated Token from Register Function: {}", jwtToken);
 
@@ -55,8 +56,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         log.info("AuthenticationResponse From Authenticate Function: {}", user);
 
-        var jwtToken = jwtServiceImpl.generateToken(user);
-        var refreshToken = jwtServiceImpl.generateRefreshToken(user);
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
 
         log.info("Generated Token from Authenticate Function: {}", jwtToken);
 
@@ -75,15 +76,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         refreshToken = authorizationHeader.substring(7);
-        userEmail = jwtServiceImpl.extractUserName(refreshToken);
+        userEmail = jwtService.extractUserName(refreshToken);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userDetails = this.userRepository.findByEmail(userEmail).orElseThrow();
             log.info("User Details from Refresh Token: {}", userDetails);
 
-            if (jwtServiceImpl.isTokenValidated(refreshToken, userDetails)) {
+            if (jwtService.isTokenValidated(refreshToken, userDetails)) {
 
-                var accessToken = jwtServiceImpl.generateToken(userDetails);
+                var accessToken = jwtService.generateToken(userDetails);
                 log.info("Generated Token from Refresh Token Function: {}", accessToken);
 
                 var authResponse = AuthenticationResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
